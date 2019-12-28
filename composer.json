@@ -1,0 +1,15 @@
+{
+    "name": "livijn/multiple-tokens-auth",
+    "description": "Adds the ability to use multiple tokens for the auth:api middleware.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fredrik Livijn",
+            "email": "ouff@live.se"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "orchestra/testbench": "^4.0"
+    }
+}
