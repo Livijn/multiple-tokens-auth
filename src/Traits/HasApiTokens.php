@@ -28,7 +28,7 @@ trait HasApiTokens
         }
 
         ApiToken::create([
-            'user_id' => $this->id,
+            'user_id' => $this->getAuthIdentifier(),
             'token' => $hashedToken,
         ]);
 

@@ -5,6 +5,8 @@
 
 Adds the ability to use multiple tokens for the auth:api middleware. Useful if you want to allow a user to be logged in to your e.g. SPA, iOS app and android app at the same time. The default token driver only allows one token per user. 
 
+You may also take a look at the example app [multiple-tokens-auth-testapp](https://github.com/Livijn/multiple-tokens-auth-testapp).
+
 ## Install
 1. Install the package with composer:
     ```
@@ -68,6 +70,9 @@ To delete all tokens connected to a user, use the `purgeApiTokens` method.
 $user = User::first();
 $user->purgeApiTokens();
 ```
+
+## Limitations
+* By default, the migration is shipped with the field `user_id` that has `unsignedBigInteger`. This needs to be manually changed if you for example use `uuid`.
 
 ## Testing
 
