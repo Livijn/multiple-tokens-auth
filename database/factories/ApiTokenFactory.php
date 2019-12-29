@@ -8,5 +8,6 @@ $factory->define(ApiToken::class, function (Faker $faker) {
     return [
         'user_id' => factory(User::class),
         'token' => Str::random(64),
+        'expired_at' => now()->addDays(60),
     ];
 });

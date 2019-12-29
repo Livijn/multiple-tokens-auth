@@ -30,6 +30,7 @@ class HasApiTokensTest extends TestCase
         $this->assertEquals(1, $user->apiTokens()->count());
         $this->assertEquals($user->id, ApiToken::first()->user_id);
         $this->assertEquals($token, ApiToken::first()->token);
+        $this->assertTrue(ApiToken::first()->expired_at->isSameDay(now()->addDays(config('multiple-tokens-auth.token.life_length'))));
     }
 
     /** @test It can generate an api token with hash */

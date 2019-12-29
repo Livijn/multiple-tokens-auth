@@ -13,9 +13,11 @@ class CreateApiTokensTable extends Migration
      */
     public function up()
     {
-        Schema::create('api_tokens', function (Blueprint $table) {
+        Schema::create(config('multiple-tokens-auth.table'), function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->index();
             $table->string('token', 80)->unique();
+            $table->dateTime('expired_at');
         });
     }
 
@@ -26,6 +28,6 @@ class CreateApiTokensTable extends Migration
      */
     public function down()
     {
-        Schema::drop('api_tokens');
+        Schema::drop(config('multiple-tokens-auth.table'));
     }
 }

@@ -30,6 +30,7 @@ trait HasApiTokens
         ApiToken::create([
             'user_id' => $this->getAuthIdentifier(),
             'token' => $hashedToken,
+            'expired_at' => now()->addDays(config('multiple-tokens-auth.token.life_length')),
         ]);
 
         return $token;

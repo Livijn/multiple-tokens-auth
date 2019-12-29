@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="https://assets-ouch.icons8.com/preview/596/ee24711c-1b0e-4e3c-8209-befacf8e388b.png" width="150">
+</p>
+
 # multiple-tokens-auth
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/livijn/multiple-tokens-auth.svg?style=flat-square)](https://packagist.org/packages/livijn/multiple-tokens-auth)
@@ -7,13 +11,15 @@ Adds the ability to use multiple tokens for the auth:api middleware. Useful if y
 
 You may also take a look at the example app [multiple-tokens-auth-testapp](https://github.com/Livijn/multiple-tokens-auth-testapp).
 
+By default, the migration is shipped with the field `user_id` that has `unsignedBigInteger`. This needs to be manually changed if you use `uuid` in your User model.
+
 ## Install
 1. Install the package with composer:
     ```bash
     composer require livijn/multiple-tokens-auth
     ```
 
-2. Publish the migrations:
+2. Publish the `multiple-tokens-auth.php` config & migrations:
     ```bash
     php artisan vendor:publish --provider="Livijn\MultipleTokensAuth\MultipleTokensAuthServiceProvider"
     ```
@@ -45,6 +51,14 @@ You may also take a look at the example app [multiple-tokens-auth-testapp](https
        // ...
    } 
    ```
+   
+6. *(Optional)* Add the `PurgeExpiredApiTokensJob` to your Queue at `Console/Kernel.php`.
+   ```php
+   protected function schedule(Schedule $schedule)
+   {
+       $schedule->job(PurgeExpiredApiTokensJob::class)->dailyAt('01:00');
+   }
+   ```
 
 ## Usage
 You can use this the same way as you would use the [default Laravel token based API authorization](https://laravel.com/docs/master/api-authentication). This package also supports [hashing](https://laravel.com/docs/master/api-authentication#hashing-tokens).
@@ -71,13 +85,7 @@ $user = User::first();
 $user->purgeApiTokens();
 ```
 
-## Limitations
-* By default, the migration is shipped with the field `user_id` that has `unsignedBigInteger`. This needs to be manually changed if you for example use `uuid`.
-* The `api_tokens` table name is non-configurable. Meaning, we have no config for changing the name of that table.
-* No expiration date on tokens
-
 ## Testing
-
 Run the tests with:
 
 ```bash

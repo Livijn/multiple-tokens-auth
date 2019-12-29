@@ -4,7 +4,7 @@ namespace Livijn\MultipleTokensAuth\Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Livijn\MultipleTokensAuth\MultipleTokensAuthGuard;
+use Livijn\MultipleTokensAuth\MultipleTokensGuard;
 use Livijn\MultipleTokensAuth\Models\ApiToken;
 use Illuminate\Support\Facades\Route;
 
@@ -12,7 +12,7 @@ class MultipleTokensAuthGuardTest extends TestCase
 {
     private function createGuard($hash = false, string $token = null)
     {
-        return new MultipleTokensAuthGuard(
+        return new MultipleTokensGuard(
             $this->app['auth']->createUserProvider('users'),
             new Request(['api_token' => $token]),
             $hash
@@ -40,6 +40,15 @@ class MultipleTokensAuthGuardTest extends TestCase
         $this->assertTrue($guard->validate(['token' => $token]));
     }
 
+    /** @test It doesnt validate expired tokens */
+    public function it_doesnt_validate_expired_tokens()
+    {
+        $token = factory(ApiToken::class)->create(['expired_at' => now()->subDay()]);
+        $guard = $this->createGuard();
+
+        $this->assertFalse($guard->validate(['token' => $token->token]));
+    }
+
     /** @test It can get a user from a valid token */
     public function it_can_get_a_user_from_a_valid_token()
     {
@@ -49,6 +58,15 @@ class MultipleTokensAuthGuardTest extends TestCase
 
         $this->assertNotNull($guard->user());
         $this->assertTrue($user->is($guard->user()));
+    }
+
+    /** @test It doesnt return a user if the token is expired */
+    public function it_doesnt_return_a_user_if_the_token_is_expired()
+    {
+        $token = factory(ApiToken::class)->create(['expired_at' => now()->subDay()]);
+        $guard = $this->createGuard(false, $token->token);
+
+        $this->assertNull($guard->user());
     }
 
     /** @test It returns 401 if the token is invalid */
@@ -142,5 +160,23 @@ class MultipleTokensAuthGuardTest extends TestCase
         auth()->guard('api')->logout();
 
         $this->assertEquals(1, ApiToken::count());
+    }
+
+    /** @test Using a token that should is about to expire, updates its expiration date */
+    public function using_a_token_that_should_is_about_to_expire_updates_its_expiration_date()
+    {
+        Route::get('multiple-tokens-auth/test-update-expired_at', function () {
+            return null;
+        })->middleware('auth:api');
+
+        $user = factory(User::class)->create();
+        $token = factory(ApiToken::class)->create(['user_id' => $user->id, 'expired_at' => now()->addDay()]);
+
+        $request = $this->getJson('multiple-tokens-auth/test-update-expired_at', ['Authorization' => 'Bearer ' . $token->token]);
+        $request->assertSuccessful();
+
+        $this->assertTrue(
+            $token->fresh()->expired_at->isSameDay(now()->addDays(config('multiple-tokens-auth.token.life_length')))
+        );
     }
 }

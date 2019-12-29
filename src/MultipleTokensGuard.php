@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Http\Request;
 use Livijn\MultipleTokensAuth\Models\ApiToken;
 
-class MultipleTokensAuthGuard implements Guard
+class MultipleTokensGuard implements Guard
 {
     use GuardHelpers;
 
@@ -40,16 +40,28 @@ class MultipleTokensAuthGuard implements Guard
 
         $token = $this->getTokenForRequest();
 
-        $apiToken = ApiToken::where('token', $this->hashedToken($token))->first();
+        $apiToken = ApiToken::where('token', $this->hashedToken($token))
+            ->whereHasNotExpired()
+            ->first();
 
-        return $this->user = ! is_null($apiToken)
-            ? $this->provider->retrieveById($apiToken->user_id)
-            : null;
+        if (is_null($apiToken)) {
+            return $this->user = null;
+        }
+
+        if ($apiToken->shouldExtendLife()) {
+            $apiToken->update([
+                'expired_at' => now()->addDays(config('multiple-tokens-auth.token.life_length')),
+            ]);
+        }
+
+        return $this->user = $this->provider->retrieveById($apiToken->user_id);
     }
 
     public function validate(array $credentials = [])
     {
-        return ApiToken::where('token', $this->hashedToken($credentials))->exists();
+        return ApiToken::where('token', $this->hashedToken($credentials))
+            ->whereHasNotExpired()
+            ->exists();
     }
 
     public function logout()
