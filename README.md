@@ -45,7 +45,7 @@ Adds the ability to use multiple tokens for the auth:api middleware. Useful if y
    ```
 
 ## Usage
-You can use this the same way as you would use the [default Laravel token based API authorization](https://laravel.com/docs/master/api-authentication). This package also supports the `hash` feature.
+You can use this the same way as you would use the [default Laravel token based API authorization](https://laravel.com/docs/master/api-authentication). This package also supports [hashing](https://laravel.com/docs/master/api-authentication#hashing-tokens).
 
 ### Sign in
 When a user logs in, you should create a new api token by using the `generateApiToken` method.
