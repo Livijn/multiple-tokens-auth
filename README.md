@@ -36,9 +36,9 @@ Adds the ability to use multiple tokens for the auth:api middleware. Useful if y
    
 5. Add the `HasApiTokens` trait to your User model.
    ``` 
-   class User extends Model implements AuthorizableContract, AuthenticatableContract
+   class User extends Authenticatable
    {
-       use Authorizable, Authenticatable, HasApiTokens;
+       use Notifiable, HasApiTokens;
    
        // ...
    } 
@@ -48,14 +48,14 @@ Adds the ability to use multiple tokens for the auth:api middleware. Useful if y
 You can use this the same way as you would use the [default Laravel token based API authorization](https://laravel.com/docs/master/api-authentication). This package also supports the `hash` feature.
 
 ### Sign in
-When a user logs in, you should create a new api token by using the `generateApiToken` method:
+When a user logs in, you should create a new api token by using the `generateApiToken` method.
 ```
 $user = User::first();
 $token = $user->generateApiToken(); // returns ltBKMC8zwnshLcrVh9W07IGuifysDqkyWRt6Z5szYJOrh1mnNPValkAtETj0vtPJdsfDQa4E3Yx0N3QU
 ```
 
 ### Sign out
-When you want to log out a user, you can use the `logout` method on the Auth facade:
+When you want to log out a user, you can use the `logout` method on the Auth facade. This will delete the token that was used for the current request.
 ```
 auth()->logout();
 // or
@@ -63,7 +63,7 @@ Auth::logout();
 ```
 
 ### Purging tokens
-To delete all tokens connected to a user, use the `purgeApiTokens` method:
+To delete all tokens connected to a user, use the `purgeApiTokens` method.
 ```
 $user = User::first();
 $user->purgeApiTokens();

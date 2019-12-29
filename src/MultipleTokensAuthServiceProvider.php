@@ -1,7 +1,6 @@
 <?php
 namespace Livijn\MultipleTokensAuth;
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
