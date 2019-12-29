@@ -1,6 +1,7 @@
 {
     "name": "livijn/multiple-tokens-auth",
     "description": "Adds the ability to use multiple tokens for the auth:api middleware.",
+    "homepage": "https://github.com/livijn/multiple-tokens-auth",
     "license": "MIT",
     "authors": [
         {
@@ -8,8 +9,33 @@
             "email": "ouff@live.se"
         }
     ],
-    "require": {},
+    "require": {
+        "php" : ">=7.2.0"
+    },
     "require-dev": {
-        "orchestra/testbench": "^4.0"
-    }
+        "orchestra/testbench": "^4.0",
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Livijn\\MultipleTokensAuth\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Livijn\\MultipleTokensAuth\\Test\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Livijn\\MultipleTokensAuth\\MultipleTokensAuthServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
