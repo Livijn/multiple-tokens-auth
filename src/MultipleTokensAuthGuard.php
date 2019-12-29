@@ -38,24 +38,18 @@ class MultipleTokensAuthGuard implements Guard
             return $this->user;
         }
 
-        $user = null;
-
         $token = $this->getTokenForRequest();
 
-        try {
-            $apiToken = ApiToken::where('token', $token)->firstOrFail();
+        $apiToken = ApiToken::where('token', $this->hashedToken($token))->first();
 
-            $user = $this->provider->retrieveById($apiToken->user_id);
-        } catch (\Exception $e) {
-            $user = null;
-        }
-
-        return $this->user = $user;
+        return $this->user = ! is_null($apiToken)
+            ? $this->provider->retrieveById($apiToken->user_id)
+            : null;
     }
 
     public function validate(array $credentials = [])
     {
-        return ApiToken::where('token', $this->token($credentials))->exists();
+        return ApiToken::where('token', $this->hashedToken($credentials))->exists();
     }
 
     public function logout()
@@ -64,7 +58,7 @@ class MultipleTokensAuthGuard implements Guard
             return;
         }
 
-        ApiToken::where('token', $token)->delete();
+        ApiToken::where('token', $this->hashedToken($token))->delete();
         $this->user = null;
     }
 
@@ -87,7 +81,7 @@ class MultipleTokensAuthGuard implements Guard
         return $token;
     }
 
-    private function token($token)
+    private function hashedToken($token)
     {
         $token = is_array($token) ? $token['token'] : $token;
 

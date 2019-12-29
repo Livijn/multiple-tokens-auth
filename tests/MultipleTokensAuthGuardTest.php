@@ -85,8 +85,8 @@ class MultipleTokensAuthGuardTest extends TestCase
         ]]);
     }
 
-    /** @test It can logout */
-    public function it_can_logout()
+    /** @test It can logout without hash */
+    public function it_can_logout_without_hash()
     {
         Route::get('multiple-tokens-auth/test-logout', function () {
             auth()->logout();
@@ -110,6 +110,29 @@ class MultipleTokensAuthGuardTest extends TestCase
 
         $request = $this->getJson('multiple-tokens-auth/test-logout', ['Authorization' => 'Bearer ' . $tokenTwo]);
         $request->assertUnauthorized();
+    }
+
+    /** @test It can logout with hash */
+    public function it_can_logout_with_hash()
+    {
+        config()->set('auth.guards.api.hash', true);
+
+        Route::get('multiple-tokens-auth/test-logout', function () {
+            auth()->logout();
+            return null;
+        })->middleware('auth:api');
+
+        $user = factory(User::class)->create();
+        $token = $user->generateApiToken();
+
+        $this->assertEquals(1, ApiToken::count());
+        $this->assertEquals(1, $user->apiTokens()->count());
+
+        $request = $this->getJson('multiple-tokens-auth/test-logout', ['Authorization' => 'Bearer ' . $token]);
+        $request->assertSuccessful();
+
+        $this->assertEquals(0, ApiToken::count());
+        $this->assertEquals(0, $user->apiTokens()->count());
     }
 
     /** @test Logging out without a token doesnt delete any token */
