@@ -1,4 +1,8 @@
 # multiple-tokens-auth
+
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/livijn/multiple-tokens-auth.svg?style=flat-square)](https://packagist.org/packages/livijn/multiple-tokens-auth)
+[![Total Downloads](https://img.shields.io/packagist/dt/livijn/multiple-tokens-auth.svg?style=flat-square)](https://packagist.org/packages/livijn/multiple-tokens-auth)
+
 Adds the ability to use multiple tokens for the auth:api middleware. Useful if you want to allow a user to be logged in to your e.g. SPA, iOS app and android app at the same time. The default token driver only allows one token per user. 
 
 ## Install
