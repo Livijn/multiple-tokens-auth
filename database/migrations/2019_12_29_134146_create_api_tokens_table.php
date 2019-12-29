@@ -14,8 +14,8 @@ class CreateApiTokensTable extends Migration
     public function up()
     {
         Schema::create('api_tokens', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id');
-            $table->string('token', 80)->unique()->index();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->string('token', 80)->unique();
         });
     }
 

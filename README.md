@@ -74,6 +74,7 @@ $user->purgeApiTokens();
 ## Limitations
 * By default, the migration is shipped with the field `user_id` that has `unsignedBigInteger`. This needs to be manually changed if you for example use `uuid`.
 * The `api_tokens` table name is non-configurable. Meaning, we have no config for changing the name of that table.
+* No expiration date on tokens
 
 ## Testing
 
