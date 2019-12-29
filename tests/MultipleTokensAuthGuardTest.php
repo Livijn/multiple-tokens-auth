@@ -12,13 +12,9 @@ class MultipleTokensAuthGuardTest extends TestCase
 {
     private function createGuard($hash = false, string $token = null)
     {
-        $request = $token
-            ? new Request(['token' => $token])
-            : new Request;
-
         return new MultipleTokensAuthGuard(
             $this->app['auth']->createUserProvider('users'),
-            $request,
+            new Request(['api_token' => $token]),
             $hash
         );
     }

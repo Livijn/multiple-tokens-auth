@@ -64,10 +64,10 @@ class MultipleTokensAuthGuard implements Guard
 
     private function getTokenForRequest()
     {
-        $token = $this->request->query('token');
+        $token = $this->request->query('api_token');
 
         if (empty($token)) {
-            $token = $this->request->input('token');
+            $token = $this->request->input('api_token');
         }
 
         if (empty($token)) {
