@@ -8,9 +8,9 @@
 
 Adds the ability to use multiple tokens for the auth:api middleware. Useful if you want to allow a user to be logged in to your e.g. SPA, iOS app and android app at the same time. The default token driver only allows one token per user. 
 
-You may also take a look at the example app [multiple-tokens-auth-testapp](https://github.com/Livijn/multiple-tokens-auth-testapp).
+It is possible to end up with a large table when using multiple tokens per user. Therefor we set an expiration date on the tokens. If possible, you should add the `PurgeExpiredApiTokensJob` to your Schedule as the *Step 6* describes. If not, you should somehow take care of the expired tokens.
 
-By default, the migration is shipped with the field `user_id` that has `unsignedBigInteger`. This needs to be manually changed if you use `uuid` in your User model.
+You may take a look at the example app [multiple-tokens-auth-testapp](https://github.com/Livijn/multiple-tokens-auth-testapp).
 
 ## Install
 1. Install the package with composer:
@@ -22,6 +22,7 @@ By default, the migration is shipped with the field `user_id` that has `unsigned
     ```bash
     php artisan vendor:publish --provider="Livijn\MultipleTokensAuth\MultipleTokensAuthServiceProvider"
     ```
+   > By default, the migration is shipped with the field `user_id` that has `unsignedBigInteger`. This needs to be manually changed if you use `uuid` in your User model.
 
 3. Run the migrations:
     ```bash
@@ -51,7 +52,7 @@ By default, the migration is shipped with the field `user_id` that has `unsigned
    } 
    ```
    
-6. *(Optional)* Add the `PurgeExpiredApiTokensJob` to your Queue at `Console/Kernel.php`.
+6. *(Optional)* Add the `PurgeExpiredApiTokensJob` to your Schedule at `Console/Kernel.php`.
    ```php
    protected function schedule(Schedule $schedule)
    {
