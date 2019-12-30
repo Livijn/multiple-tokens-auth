@@ -14,6 +14,10 @@ class ApiToken extends Model
         'expired_at' => 'datetime'
     ];
 
+    protected $primaryKey = 'token';
+
+    public $incrementing = false;
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);

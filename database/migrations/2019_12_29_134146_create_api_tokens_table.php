@@ -14,7 +14,6 @@ class CreateApiTokensTable extends Migration
     public function up()
     {
         Schema::create(config('multiple-tokens-auth.table'), function (Blueprint $table) {
-            $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->index();
             $table->string('token', 80)->unique();
             $table->dateTime('expired_at');

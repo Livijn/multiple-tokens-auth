@@ -3,7 +3,6 @@
 </p>
 
 # multiple-tokens-auth
-
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/livijn/multiple-tokens-auth.svg?style=flat-square)](https://packagist.org/packages/livijn/multiple-tokens-auth)
 [![Total Downloads](https://img.shields.io/packagist/dt/livijn/multiple-tokens-auth.svg?style=flat-square)](https://packagist.org/packages/livijn/multiple-tokens-auth)
 
