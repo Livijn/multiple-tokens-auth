@@ -51,6 +51,26 @@ class HasApiTokensTest extends TestCase
         $this->assertEquals(hash('sha256', $token), ApiToken::first()->token);
     }
 
+    /** @test It uses the hash config variable when generating a token */
+    public function it_uses_the_hash_config_variable_when_generating_a_token()
+    {
+        $user = factory(User::class)->create();
+
+        config()->set('multiple-tokens-auth.hash', null);
+        $tokenOne = $user->generateApiToken();
+
+        config()->set('multiple-tokens-auth.hash', true);
+        $tokenTwo = $user->generateApiToken();
+
+        config()->set('multiple-tokens-auth.hash', false);
+        config()->set('auth.guards.api.hash', true);
+        $tokenThree = $user->generateApiToken();
+
+        $this->assertEquals($tokenOne, ApiToken::first()->token);
+        $this->assertEquals(hash('sha256', $tokenTwo), ApiToken::skip(1)->first()->token);
+        $this->assertEquals($tokenThree, ApiToken::skip(2)->first()->token);
+    }
+
     /** @test It can purge api tokens */
     public function it_can_purge_api_tokens()
     {

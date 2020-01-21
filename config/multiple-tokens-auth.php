@@ -16,4 +16,10 @@ return [
         */
         'extend_life_at' => 10,
     ],
+
+    /**
+     * Set to true or false to enable/disable token hashing.
+     * When set to null, it will default to the auth.guards.api.hash config var.
+     */
+    'hash' => null,
 ];

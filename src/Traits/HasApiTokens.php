@@ -13,7 +13,7 @@ trait HasApiTokens
 
     public function generateApiToken()
     {
-        $useHash = config('auth.guards.api.hash', false);
+        $useHash = config('multiple-tokens-auth.hash') ?? config('auth.guards.api.hash', false);
         $unique = false;
         $token = null;
         $hashedToken = null;

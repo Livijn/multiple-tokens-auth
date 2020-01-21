@@ -71,6 +71,7 @@ class MultipleTokensGuard implements Guard
         }
 
         ApiToken::where('token', $this->hashedToken($token))->delete();
+
         $this->user = null;
     }
 
