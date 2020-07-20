@@ -15,6 +15,11 @@ return [
          * Value is in days.
         */
         'extend_life_at' => 10,
+
+        /*
+         * Amount of characters for tokens.
+        */
+        'char_length' => 80,
     ],
 
     /**

@@ -19,7 +19,7 @@ trait HasApiTokens
         $hashedToken = null;
 
         while (! $unique) {
-            $token = Str::random(80);
+            $token = Str::random(config('multiple-tokens-auth.token.char_length'));
             $hashedToken = $useHash
                 ? hash('sha256', $token)
                 : $token;
