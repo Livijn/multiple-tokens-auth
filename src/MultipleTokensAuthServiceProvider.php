@@ -18,7 +18,7 @@ class MultipleTokensAuthServiceProvider extends ServiceProvider
 
         Auth::extend('multiple-tokens', function ($app, $name, array $config) {
             return new MultipleTokensGuard(
-                $app['auth']->createUserProvider('users'),
+                Auth::createUserProvider($config['provider']),
                 $app['request'],
                 config()->get('multiple-tokens-auth.hash') ?? $config['hash'] ?? false
             );
