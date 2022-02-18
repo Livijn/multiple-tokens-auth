@@ -1,6 +1,5 @@
-<p align="center">
-    <img src="https://assets-ouch.icons8.com/preview/596/ee24711c-1b0e-4e3c-8209-befacf8e388b.png" width="150">
-</p>
+# Important
+This was released before Laravel Sanctum. I would recommend using [Laravel Sanctum](https://laravel.com/docs/master/sanctum) instead.
 
 # multiple-tokens-auth
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/livijn/multiple-tokens-auth.svg?style=flat-square)](https://packagist.org/packages/livijn/multiple-tokens-auth)
